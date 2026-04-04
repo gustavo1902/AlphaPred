@@ -1,7 +1,6 @@
 import requests
 
-POLYMARKET_API = "https://api.polymarket.com/markets"
-
+POLYMARKET_API = "https://gamma-api.polymarket.com/markets"
 def fetch_polymarket_events():
     response = requests.get(POLYMARKET_API)
 
