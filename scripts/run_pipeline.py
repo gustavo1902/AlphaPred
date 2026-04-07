@@ -27,6 +27,8 @@ def run():
 
     return results
 
+
 if __name__ == "__main__":
+    import json
     data = run()
-    print(data)
+    print(json.dumps(data))
