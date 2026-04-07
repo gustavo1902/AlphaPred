@@ -31,4 +31,6 @@ def run():
 if __name__ == "__main__":
     import json
     data = run()
+    with open("data/signals.json", "w") as f:
+        json.dump(data, f)
     print(json.dumps(data))
