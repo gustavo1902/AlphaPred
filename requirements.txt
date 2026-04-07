@@ -1,2 +1,5 @@
-requests
+fastapi
+uvicorn
 streamlit
+pandas
+requests
