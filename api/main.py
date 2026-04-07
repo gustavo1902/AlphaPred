@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from scripts.run_pipeline import run
+import json
 
 app = FastAPI()
 
@@ -9,4 +10,5 @@ def root():
 
 @app.get("/signals")
 def signals():
-    return run()
+    with open("data/signals.json") as f:
+        return json.load(f)
