@@ -1,10 +1,14 @@
+import logging
 import requests
 
-POLYMARKET_API = "https://gamma-api.polymarket.com/markets"
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 def fetch_polymarket_events():
-    response = requests.get(POLYMARKET_API)
-
-    print("STATUS:", response.status_code)
-    print("TEXT:", response.text[:500])  
-
-    return []
+    try:
+        response = requests.get(POLYMARKET_API, timeout=10)
+        response.raise_for_status() 
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Erro ao buscar dados da Polymarket: {e}")
+        return []
