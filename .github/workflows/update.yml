@@ -3,26 +3,45 @@ name: Update Signals
 on:
   schedule:
     - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write  
 
 jobs:
   update:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
+          cache: 'pip'
 
-      - run: pip install -r requirements.txt
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
 
-      - run: PYTHONPATH=. python scripts/run_pipeline.py
+      - name: Run Pipeline
+        run: PYTHONPATH=. python scripts/run_pipeline.py
+        env:
+          PYTHONPATH: .
 
-      - name: Commit updated data
+      - name: Commit and Push Changes
         run: |
-          git config --global user.name "bot"
-          git config --global user.email "bot@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Adiciona apenas o arquivo de dados
           git add data/signals.json
-          git commit -m "update signals" || echo "no changes"
-          git push
+          
+          # Só faz o commit se houver diferença, evitando erro no log
+          if git diff --cached --quiet; then
+            echo "No changes in signals.json"
+          else
+            git commit -m "chore: update signals [automated]"
+            git push
+          fi
